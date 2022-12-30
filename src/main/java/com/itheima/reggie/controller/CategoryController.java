@@ -48,7 +48,8 @@ log.info("删除id为{}",ids);
 return R.success("分类信息删除成功！");
 }
 
-@PostMapping
+
+@PutMapping
 public R<String> update(@RequestBody Category category){
         log.info("修改信息");
         categoryService.updateById(category);
