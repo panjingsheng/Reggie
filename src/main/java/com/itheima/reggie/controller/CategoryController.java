@@ -40,16 +40,20 @@ return R.success(pageInfo);
 
 
 @DeleteMapping
-public R<String> delete(Long id){
-log.info("删除id为{}",id);
+public R<String> delete(Long ids){
+log.info("删除id为{}",ids);
 //categoryService.removeById(id);
 
-    categoryService.remove(id);
+    categoryService.remove(ids);
 return R.success("分类信息删除成功！");
 }
 
-
-
+@PostMapping
+public R<String> update(@RequestBody Category category){
+        log.info("修改信息");
+        categoryService.updateById(category);
+        return R.success("修改分类信息成功！");
+}
 
 
 }
