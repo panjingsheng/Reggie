@@ -39,4 +39,15 @@ return R.success(pageInfo);
 
 
 
+@DeleteMapping
+public R<String> delete(Long id){
+log.info("删除id为{}",id);
+categoryService.removeById(id);
+return R.success("分类信息删除成功！");
+}
+
+
+
+
+
 }
