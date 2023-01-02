@@ -7,10 +7,10 @@ import com.itheima.reggie.entity.ShoppingCart;
 import com.itheima.reggie.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -42,10 +42,43 @@ queryWrapper.eq(ShoppingCart::getSetmealId,shoppingCart.getSetmealId());
          shoppingCartService.updateById(cartServiceOne);
         }else {
             shoppingCart.setNumber(1);
+            shoppingCart.setCreateTime(LocalDateTime.now());
 shoppingCartService.save(shoppingCart);
 cartServiceOne=shoppingCart;
         }
 
         return R.success(cartServiceOne);
     }
+
+
+
+
+
+@GetMapping("/list")
+    public R<List<ShoppingCart>> list(){
+    Long id = BaseContext.getCurrentId();
+    LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+    queryWrapper.eq(ShoppingCart::getUserId, id);
+queryWrapper.orderByAsc(ShoppingCart::getCreateTime);
+
+    List<ShoppingCart> list = shoppingCartService.list(queryWrapper);
+
+
+    return R.success(list);
+    }
+
+
+
+@DeleteMapping("/clean")
+public R<String> clean(){
+    LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+    queryWrapper.eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
+    shoppingCartService.remove(queryWrapper);
+
+
+    return R.success("清空购物车成功");
+}
+
+
+
 }
